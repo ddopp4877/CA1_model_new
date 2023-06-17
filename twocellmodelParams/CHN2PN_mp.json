@@ -1,0 +1,1 @@
+{"filename": "CHN2PN.json", "cell1": "h.axoaxoniccell()", "cell2": "h.pyramidalcell()", "simParams": {"tstop": 300, "h.dt": 0.1, "h.L": 20, "vinit": -63}, "IclampParams": {"delay": 100, "dur": 8, "amp": 0.6}, "gSyn": {"gbar_gaba": -1}, "synTargetParams": {"secName": "axon", "secNo": "6", "segNo": "0.5"}}

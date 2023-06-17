@@ -1,0 +1,449 @@
+// Network cell template
+// PyramidalCell
+// Geometry: 14 sections + axon
+// Active properties: from Poirazi et al, Neuron 2003
+// Adjusted to get more decrementing BPAP
+// BPG & VCU, 2-1-09
+
+begintemplate pyramidalcell
+
+// public variables
+public is_art, gid, randi, Vrest
+public init, topol, basic_shape, subsets, geom, biophys
+public pre_list, connect_pre
+
+public soma, apical, basal, axon
+public all, basal_list, apical_list, soma_list, axon_list, rad_list, lm_list, dendrite_list
+public x, y, z, position, myroot, Vrest
+public NumSoma, NumApical, NumBasal, NumAxon
+
+// strings
+strdef myroot
+
+// objects
+objref syn, pre_list, templist, rootlist, this
+
+//external variables
+//external numCellTypes, cellType
+
+NumSoma=1
+NumApical=9
+NumBasal=4
+NumAxon=12
+create soma[NumSoma], apical[NumApical], basal[NumBasal], axon[NumAxon]
+
+proc init() { 
+	//gid = $1
+	//randi = $2
+	Vrest = -63 // -65 // $3 resting membrane potential in mV
+	// cell sections: soma, dendrites, axon
+	append_sections() // append all sections to the section list
+	connect_sections()// connect soma, dendrites, axon
+	size_sections()	// set the size dimensions of each section
+	define_shape()
+	
+	// subcellular mechanisms: channels, pumps, transporters
+	mechinit()			// local fcn: set values for max conductances and reversal potentials of ion channels and other ephys parameters that are subject to fitting
+	insert_mechs()		// local fcn: insert ion channels and actually set values determined in the mechinit fcn
+	
+	set_nseg()		// set the number of segments in each section
+					// if this is driven by an error-minimization rule,
+					// make sure to do it after setting the morphology
+					// and inserting the mechanisms, as it depends on those
+	//get_root()
+	
+	//pre_list = new List() // define a list for the presynaptic connections
+	//define_synapses($3)	// local fcn: define all possible synaptic connections received by this cell
+
+}
+
+
+proc connect_sections() { local i
+  connect apical[0](0), soma(1)
+  connect apical[1](0), apical[0](1)
+  connect apical[2](0), apical[1](1)
+  connect apical[3](0), apical[2](1)
+  connect apical[4](0), apical[3](1)
+  connect apical[5](0), apical[4](1)
+  connect apical[6](0), apical[2](1)
+  connect apical[7](0), apical[6](1)
+  connect apical[8](0), apical[7](1)
+  connect basal[0](0), soma(0)
+  connect basal[1](0), basal[0](1)
+  connect basal[2](0), soma(0)
+  connect basal[3](0), basal[2](1)
+  connect axon[0](0), soma(0)
+  connect axon[1](0), axon[0](1)
+  connect axon[2](0), axon[1](1)
+  connect axon[3](0), axon[2](1)
+  connect axon[4](0), axon[3](1)
+  connect axon[5](0), axon[4](1)
+  connect axon[6](0), axon[5](1)
+  connect axon[7](0), axon[6](1)
+  connect axon[8](0), axon[7](1)
+  connect axon[9](0), axon[8](1)
+  connect axon[10](0), axon[9](1)
+  connect axon[11](0), axon[10](1)
+
+  //basic_shape()
+}
+
+
+objref all, basal_list, apical_list, soma_list, axon_list, rad_list, lm_list, dendrite_list
+proc append_sections() { local i
+  objref all, basal_list, apical_list, soma_list, axon_list, rad_list, lm_list, dendrite_list
+  all = new SectionList()
+    
+	soma all.append()
+
+	axon[0] all.append()
+	axon[1] all.append()
+	axon[2] all.append()
+	axon[3] all.append()
+	axon[4] all.append()
+	axon[5] all.append()
+	axon[6] all.append()
+	axon[7] all.append()
+	axon[8] all.append()
+	axon[9] all.append()
+	axon[10] all.append()
+	axon[11] all.append()
+
+    apical[0] all.append()
+    apical[1] all.append()
+    apical[2] all.append()
+    apical[3] all.append()
+    apical[4] all.append()
+    apical[5] all.append()
+    apical[6] all.append()
+    apical[7] all.append()
+    apical[8] all.append()
+
+
+
+
+    basal[0] all.append()
+    basal[1] all.append()
+    basal[2] all.append()
+    basal[3] all.append()
+	
+
+
+	
+	basal_list = new SectionList()
+    basal[0] basal_list.append()
+    basal[1] basal_list.append()
+    basal[2] basal_list.append()
+    basal[3] basal_list.append()
+	
+	apical_list = new SectionList()
+    apical[0] apical_list.append()
+    apical[1] apical_list.append()
+    apical[2] apical_list.append()
+    apical[3] apical_list.append()
+    apical[4] apical_list.append()
+    apical[5] apical_list.append()
+    apical[6] apical_list.append()
+    apical[7] apical_list.append()
+    apical[8] apical_list.append()
+	
+	//soma_list = new SectionList()
+    //soma soma_list.append()
+	
+	axon_list = new SectionList()
+    axon[0] axon_list.append()
+	axon[1] axon_list.append()
+	axon[2] axon_list.append()
+	axon[3] axon_list.append()
+	axon[4] axon_list.append()
+	axon[5] axon_list.append()
+	axon[6] axon_list.append()
+	axon[7] axon_list.append()
+	axon[8] axon_list.append()
+	axon[9] axon_list.append()
+	axon[10] axon_list.append()
+	axon[11] axon_list.append()
+	
+	rad_list = new SectionList()
+    apical[0] rad_list.append()
+    apical[1] rad_list.append()
+    apical[2] rad_list.append()
+	
+	lm_list = new SectionList()
+    apical[3] lm_list.append()
+    apical[4] lm_list.append()
+    apical[5] lm_list.append()
+    apical[6] lm_list.append()
+    apical[7] lm_list.append()
+    apical[8] lm_list.append()
+	
+	dendrite_list = new SectionList()
+    apical[0] dendrite_list.append()
+    apical[1] dendrite_list.append()
+    apical[2] dendrite_list.append()
+    apical[3] dendrite_list.append()
+    apical[4] dendrite_list.append()
+    apical[5] dendrite_list.append()
+    apical[6] dendrite_list.append()
+    apical[7] dendrite_list.append()
+    apical[8] dendrite_list.append()
+    basal[0] dendrite_list.append()
+    basal[1] dendrite_list.append()
+    basal[2] dendrite_list.append()
+    basal[3] dendrite_list.append()
+
+	
+}
+
+proc size_sections() {local thetaz
+	thetaz =0
+	soma[0] {pt3dclear()
+		pt3dadd(0.0, 0.0, 0.0, 10.0) // distance from (0,0,0) = 0
+		pt3dadd(0.0, 5.0, 0.0, 10.0) // distance from (0,0,0) = 10
+		pt3dadd(0.0, 10.0, 0.0, 10.0) // distance from (0,0,0) = 20
+	}
+	apical[0] {pt3dclear()
+		pt3dadd(0.0, 10.0, 0.0, 4.0) // distance from (0,0,0) = 0
+		pt3dadd(0.0, 60.0, 0.0, 4.0) // distance from (0,0,0) = 10
+		pt3dadd(0.0, 110.0, 0.0, 4.0) // distance from (0,0,0) = 20
+	}
+	apical[1] {pt3dclear()
+		pt3dadd(0.0, 110.0, 0.0, 3.0) // distance from (0,0,0) = 0
+		pt3dadd(0.0, 160.0, 0.0, 3.0) // distance from (0,0,0) = 10
+		pt3dadd(0.0, 210.0, 0.0, 3.0) // distance from (0,0,0) = 20
+	}
+	apical[2] {pt3dclear()
+		pt3dadd(0.0, 210.0, 0.0, 2.0) // distance from (0,0,0) = 0
+		pt3dadd(0.0, 310.0, 0.0, 2.0) // distance from (0,0,0) = 10
+		pt3dadd(0.0, 410.0, 0.0, 2.0) // distance from (0,0,0) = 20
+	}
+
+
+	apical[3] {pt3dclear()
+		pt3dadd(0.0, 410.0, 0.0, 2.0) // distance from (0,0,0) = 0
+		pt3dadd(35.5, 445.5, 0.0, 2.0) // distance from (0,0,0) = 10
+		pt3dadd(71.0, 481, 0.0, 2.0) // distance from (0,0,0) = 20
+	}
+	apical[4] {pt3dclear()
+		pt3dadd(71.0, 481.0, 0.0, 1.5) // distance from (0,0,0) = 0
+		pt3dadd(106.5, 516.5, 0.0, 1.5) // distance from (0,0,0) = 10
+		pt3dadd(142.0, 552, 0.0, 1.5) // distance from (0,0,0) = 20
+	}
+	apical[5] {pt3dclear()
+		pt3dadd(142.0, 552, 0.0, 1.0) // distance from (0,0,0) = 20
+		pt3dadd(159.7, 569.7, 0.0, 1.0) // distance from (0,0,0) = 20
+		pt3dadd(177.4, 587.4, 0.0, 1.0) // distance from (0,0,0) = 20
+	}
+
+
+	apical[6] {pt3dclear()
+		pt3dadd(0.0, 410.0, 0.0, 2.0) // distance from (0,0,0) = 0
+		pt3dadd(-35.5, 445.5, 0.0, 2.0) // distance from (0,0,0) = 10
+		pt3dadd(-71.0, 481, 0.0, 2.0) // distance from (0,0,0) = 20
+	}
+	apical[7] {pt3dclear()
+		pt3dadd(-71.0, 481.0, 0.0, 1.5) // distance from (0,0,0) = 0
+		pt3dadd(-106.5, 516.5, 0.0, 1.5) // distance from (0,0,0) = 10
+		pt3dadd(-142.0, 552, 0.0, 1.5) // distance from (0,0,0) = 20
+	}
+	apical[8] {pt3dclear()
+		pt3dadd(-142.0, 552, 0.0, 1.0) // distance from (0,0,0) = 20
+		pt3dadd(-159.7, 569.7, 0.0, 1.0) // distance from (0,0,0) = 20
+		pt3dadd(-177.4, 587.4, 0.0, 1.0) // distance from (0,0,0) = 20
+	}
+
+
+
+	basal[0] {pt3dclear()
+		pt3dadd(0.0, 0.0, 0.0, 2.0) // distance from (0,0,0) = 0
+		pt3dadd(35.5, -35.5, 0.0, 2.0) // distance from (0,0,0) = 10
+		pt3dadd(71, -71, 0.0, 2.0) // distance from (0,0,0) = 20
+	}
+	basal[1] {pt3dclear()
+		pt3dadd(71, -71, 0.0, 1.5) // distance from (0,0,0) = 0
+		pt3dadd(142, -142, 0.0, 1.5) // distance from (0,0,0) = 10
+		pt3dadd(212.4, -212.4, 0.0, 1.5) // distance from (0,0,0) = 20
+	}
+	basal[2] {pt3dclear()
+		pt3dadd(0.0, 0.0, 0.0, 2.0) // distance from (0,0,0) = 0
+		pt3dadd(-35.5, -35.5, 0.0, 2.0) // distance from (0,0,0) = 10
+		pt3dadd(-71, -71, 0.0, 2.0) // distance from (0,0,0) = 20
+	}
+	basal[3] {pt3dclear()
+		pt3dadd(-71, -71, 0.0, 1.5) // distance from (0,0,0) = 0
+		pt3dadd(-142, -142, 0.0, 1.5) // distance from (0,0,0) = 10
+		pt3dadd(-212.4, -212.4, 0.0, 1.5) // distance from (0,0,0) = 20
+	}
+
+
+		axon[0]{pt3dclear()
+			pt3dadd(-12.707*cos(thetaz),-12.707*sin(thetaz),0,6)
+			pt3dadd(-14.707*cos(thetaz),-14.707*sin(thetaz),0,5)
+			pt3dadd(-16.707*cos(thetaz),-16.707*sin(thetaz),0,4)
+			pt3dadd(-18.707*cos(thetaz),-18.707*sin(thetaz),0,3)
+			pt3dadd(-20.707*cos(thetaz),-20.707*sin(thetaz),0,2)
+			pt3dadd(-22.707*cos(thetaz),-22.707*sin(thetaz),0,1.3)
+			nseg = 10
+		}
+		
+		for i=2,11{
+			axon[i-1] {pt3dclear()
+				pt3dadd((-22.707-5*(i-1))*cos(thetaz),(-22.707-5*(i-1))*sin(thetaz),0, 1)
+				pt3dadd((-27.707-5*(i-1))*cos(thetaz),(-27.707-5*(i-1))*sin(thetaz),0, 1)
+			}
+		}
+
+		axon[11]{pt3dclear()
+			pt3dadd(-72.707*cos(thetaz),-72.707*sin(thetaz),0,1)
+			pt3dadd(-172.707*cos(thetaz),-172.707*sin(thetaz),0,1)
+		}
+
+}
+
+external lambda_f
+proc set_nseg() {
+  forsec all { nseg = int((L/(0.1*lambda_f(100))+.9)/2)*2 + 1  }
+}
+
+
+proc mechinit() {
+	NumSoma=1
+	NumApical=9
+	NumBasal=4
+	NumAxon=12
+
+	Rm = 28000 // 5555 // 
+	RmDend = Rm/2
+	RmSoma = Rm
+	RmAx = Rm
+
+	Cm    = 1
+	CmSoma= Cm
+	CmAx  = Cm
+	CmDend = Cm*2
+
+	celsius = 34.0  
+
+	RaAll= 150 
+	RaSoma=150 
+	RaAx = 50
+
+
+	ekval = -90
+	enaval = 55
+	eHCNval = -30
+	eleakval = 	Vrest// not lower than ekval
+
+	gNav     = 0.032 // Nav conductance in mho/cm2
+	gNavaxon = 0.15//0.064 // axon multiplier for Nav conductance
+	gKdr     = 0.003 // Kdr conductance in mho/cm2
+	gKvAdist = 0.008 // distal KvA conductance in mho/cm2
+	gKvAprox = 0.008 // proximal KvA conductance in mho/cm2
+	gHCN     = 0.0006 // hcurrent conductance in mho/cm2 --> 6 pS/um2
+	gna16_ais_max = 3200
+	gkv_axon = 1000
+}
+	
+proc insert_mechs() {
+	vhalf_na16 = -47
+	vshift_na16 = -35 - vhalf_na16 -10    // positive shift of input voltage, low threshold  -43mV
+	access soma[0]
+	distance() // calculates the distance between location 0 of the currently accessed section (as the origin) to a second point (but with this usage, it just sets the origin point) 
+
+
+		for i=0,11 axon[i] {
+			insert pas e_pas=eleakval g_pas = 1/Rm Ra=RaAx cm=CmAx
+			insert na16
+			insert kv
+		}
+
+		axon[0].gbar_na16 = gna16_ais_max	*	0.8	*	1   
+		axon[1].gbar_na16 = gna16_ais_max	*	0.1	*	1   
+		axon[2].gbar_na16 = gna16_ais_max	*	0.25	*	1   
+		axon[3].gbar_na16 = gna16_ais_max	*	0.45	*	0.95   
+		axon[4].gbar_na16 = gna16_ais_max	*	0.633014121	*	0.880142857   
+		axon[5].gbar_na16 = gna16_ais_max	*	0.8	*	0.75   
+		axon[6].gbar_na16 = gna16_ais_max	*	0.899669239	*	0.647857143  
+		axon[7].gbar_na16 = gna16_ais_max	*	0.988467875	*	0.520285714   
+		axon[8].gbar_na16 = gna16_ais_max	*	1	*	0.428571429   
+		axon[9].gbar_na16 = gna16_ais_max	*	1	*	0.342857143  
+		axon[10].gbar_na16 = gna16_ais_max	*	1	*	0.342857143  
+		axon[11].gbar_na16 = gna16_ais_max	*	1	*	0.342857143  
+		
+		axon[0].gbar_kv = gkv_axon	*	0.2 
+		axon[1].gbar_kv = gkv_axon	*	0.3 
+		axon[2].gbar_kv = gkv_axon	*	0.4 
+		axon[3].gbar_kv = gkv_axon	*	0.5 
+		axon[4].gbar_kv = gkv_axon	*	0.6 
+		axon[5].gbar_kv = gkv_axon	*	0.7 
+		axon[6].gbar_kv = gkv_axon	*	0.8 
+		axon[7].gbar_kv = gkv_axon	*	0.9
+		axon[8].gbar_kv = gkv_axon	*	1
+		axon[9].gbar_kv = gkv_axon	*	1
+		axon[10].gbar_kv = gkv_axon	*	1
+		axon[11].gbar_kv = gkv_axon	*	1
+
+	for i=0,NumSoma-1 soma[i] {   
+		insert ch_HCNp gmax_ch_HCNp=gHCN
+		vhalfl_ch_HCNp=-82
+		insert ch_Navp  gmax_ch_Navp=gNav     
+		ar2_ch_Navp=1
+		insert ch_Kdrp gmax_ch_Kdrp=gKdr
+		insert ch_KvAproxp gmax_ch_KvAproxp = gKvAprox
+		insert pas e_pas=eleakval g_pas = 1/RmSoma Ra=RaSoma cm=CmSoma
+	}
+
+	for i=0,NumBasal-1 basal[i] {
+		insert ch_Navp    gmax_ch_Navp=gNav   
+		ar2_ch_Navp=1
+		insert ch_Kdrp gmax_ch_Kdrp=gKdr 
+		insert ch_KvAproxp gmax_ch_KvAproxp = gKvAprox
+		insert pas e_pas=eleakval g_pas = 1/RmDend Ra=RaAll cm=CmDend
+	}
+
+	for i=0,NumApical-1 apical[i] {
+		insert pas e_pas=eleakval g_pas = 1/RmDend Ra=RaAll  cm=CmDend
+		if (diam>0.5 && distance(0.5)<500) {
+			insert ch_HCNp gmax_ch_HCNp = gHCN
+			insert ch_Navp 
+			ar2_ch_Navp=0.8
+			gmax_ch_Navp=gNav
+			insert ch_Kdrp 
+			gmax_ch_Kdrp=gKdr
+			insert ch_KvAproxp
+			insert ch_KvAdistp
+			gmax_ch_KvAproxp=0
+			gmax_ch_KvAdistp=0
+
+			for (x){ xdist = distance(x)
+				if (xdist>500) {xdist=500}
+				gmax_ch_HCNp(x) = gHCN*(1+1.5*xdist/100)
+				if (xdist > 100){
+					vhalfl_ch_HCNp=-90
+					gmax_ch_KvAdistp(x) = gKvAdist*(1+xdist/100)
+				} else {
+					vhalfl_ch_HCNp=-82
+					gmax_ch_KvAproxp(x) = gKvAprox*(1+xdist/100)
+				}
+			}
+		}
+	}
+
+	forall {
+        v=Vrest
+        if (ismembrane("ch_Navaxonp") || ismembrane("ch_Navp")) {ena=enaval}
+        if (ismembrane("ch_Kdrp") || ismembrane("ch_KvAproxp") || ismembrane("ch_KvAdistp")) {ek=ekval}
+        if (ismembrane("ch_HCNp") ) {e_ch_HCNp=eHCNval}
+	}
+}
+
+func is_art() { return 0 }
+
+endtemplate pyramidalcell
+
+
+
+
+
+
+

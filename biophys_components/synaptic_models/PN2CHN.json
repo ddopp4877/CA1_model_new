@@ -1,0 +1,10 @@
+{
+    "level_of_detail": "pyr2chn",
+    "gmax": "0.05",
+    "initW": "0.1",
+    "initW_lognormal_mean": 0.35,
+    "initW_lognormal_std": 0.2,
+    "tau_d_NMDA": 100,
+    "tau_r_NMDA": 10
+
+}

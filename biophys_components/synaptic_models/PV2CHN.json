@@ -1,0 +1,8 @@
+{
+    "level_of_detail": "pv2chn",
+    "gmax": "0.02",
+    "initW": "1",
+    "initW_lognormal_mean": 16,
+    "initW_lognormal_std": 0.5
+
+}

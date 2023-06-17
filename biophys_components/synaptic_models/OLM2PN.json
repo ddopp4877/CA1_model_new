@@ -1,0 +1,9 @@
+{
+    "level_of_detail": "olm2pyr",
+    "gmax" : "40",
+    "initW": "1",
+    "initW_lognormal_mean": 0.6,
+    "initW_lognormal_std": 0.3
+
+}
+

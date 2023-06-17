@@ -1,0 +1,1 @@
+{"filename": "PN2PV.json", "cell1": "h.pyramidalcell()", "cell2": "h.pvbasketcell()", "simParams": {"tstop": 300, "h.dt": 0.1, "h.L": 20, "vinit": -63}, "IclampParams": {"delay": 100, "dur": 8, "amp": 0.6}, "gSyn": {"gbar_nmda": -1, "gbar_ampa": -1}, "synTargetParams": {"secName": "dend", "secNo": "6", "segNo": "0.5"}}

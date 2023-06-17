@@ -1,0 +1,8 @@
+{
+    "level_of_detail": "olm2olm",
+    "gmax": "0.00006",
+    "initW": "1",
+    "initW_lognormal_mean": 10,
+    "initW_lognormal_std": 0.5
+
+}

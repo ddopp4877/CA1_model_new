@@ -1,0 +1,1 @@
+{"filename": "PV2PV.json", "cell1": "h.pvbasketcell()", "cell2": "h.pvbasketcell()", "simParams": {"tstop": 300, "h.dt": 0.1, "h.L": 20, "vinit": -63}, "IclampParams": {"delay": 100, "dur": 8, "amp": 0.7}, "gSyn": {"gbar_gaba": -1}, "synTargetParams": {"secName": "soma", "secNo": "0", "segNo": "0.5"}}
