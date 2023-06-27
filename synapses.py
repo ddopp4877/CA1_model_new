@@ -235,9 +235,11 @@ def Pyr2Pv(syn_params, sec_x, sec_id):
     if syn_params.get('initW'):
         m = syn_params.get('initW_lognormal_mean')
         s = syn_params.get('initW_lognormal_std')
-        mean = np.log(m) - 0.5 * np.log((s / m) ** 2 + 1)
-        std = np.sqrt(np.log((s / m) ** 2 + 1))
+        mean = m# np.log(m) - 0.5 * np.log((s / m) ** 2 + 1)
+        std = s#np.sqrt(np.log((s / m) ** 2 + 1))
         log_weight = float(np.random.lognormal(mean, std, 1))
+        # if log_weight >= float(3):
+        #     log_weight = float(3)
         if log_weight >= float(5 * m):
             log_weight = float(5 * m)
         lsyn.initW = float(log_weight)  # par.x(0) * rC.uniform(0.5,1.0)//rand.normal(0.5,1.5) //`rand.repick()
@@ -478,7 +480,7 @@ def Chn2Pyr(syn_params, sec_x, sec_id):
         s = syn_params.get('initW_lognormal_std')
         mean = m# np.log(m) - 0.5 * np.log((s/m)**2+1)
         std = s#np.sqrt(np.log((s/m)**2 + 1))
-        log_weight = float(np.random.lognormal(mean,std, 1)*0.001)
+        log_weight = float(np.random.lognormal(mean,std, 1)*0.001)#was *0.001
         if log_weight >= float(3*m):
             
             log_weight = float(3*m)

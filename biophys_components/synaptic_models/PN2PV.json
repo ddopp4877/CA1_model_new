@@ -1,8 +1,8 @@
 {
     "level_of_detail": "pyr2pv",
-    "gmax": "20",
-    "initW": "0.001",
-    "initW_lognormal_mean": 0.01,
-    "initW_lognormal_std": 0.5
+    "gmax": "0.01",
+    "initW": "1",
+    "initW_lognormal_mean": 0.5,
+    "initW_lognormal_std": 0.2
 
 }

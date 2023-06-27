@@ -37,7 +37,7 @@ def run(config_file):
     sim = bionet.BioSimulator.from_config(conf, network=graph)
     
 
-    #sim.add_mod(bionet.modules.save_synapses.SaveSynapses('updated_conns'))
+    sim.add_mod(bionet.modules.save_synapses.SaveSynapses('updated_conns'))
 
 
     # This calls insert_mechs() on each cell to use its gid as a seed

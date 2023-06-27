@@ -1,6 +1,6 @@
 {
     "level_of_detail": "pv2pyr",
-    "gmax": "0.001",
+    "gmax": "0.01",
     "initW": "1",
     "initW_lognormal_mean": 5,
     "initW_lognormal_std": 0.3,

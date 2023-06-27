@@ -1,6 +1,6 @@
 {
     "level_of_detail": "pyr2chn",
-    "gmax": "0.05",
+    "gmax": "0.1",
     "initW": "0.1",
     "initW_lognormal_mean": 0.35,
     "initW_lognormal_std": 0.2,
