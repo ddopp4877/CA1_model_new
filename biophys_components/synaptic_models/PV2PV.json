@@ -1,6 +1,6 @@
 {
     "level_of_detail": "pv2pv",
-    "gmax": "0.06",
+    "gmax": "20",
     "initW": "1",
     "initW_lognormal_mean": 1.0,
     "initW_lognormal_std": 0.3

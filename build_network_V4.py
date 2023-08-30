@@ -1,3 +1,11 @@
+
+
+'''
+same as v3 but with gap junctions
+
+'''
+
+
 from bmtk.builder import NetworkBuilder
 from bmtk.builder.auxi.node_params import positions_list, xiter_random
 from bmtk.utils.sim_setup import build_env_bionet
@@ -20,8 +28,8 @@ rng = np.random.default_rng(seed)
 net = NetworkBuilder("biophysical")
 
 # amount of cells
-NetNo = 20000
-#NetNo = 300
+#NetNo = 20000
+NetNo = 300
 IN_num = NetNo*.11#about 11% of all neurons are interneurons in this network (Bezaire 2013). We are only modeling 2, so omit the others, or substitute PV and OLM for all
 PN_num = NetNo -  IN_num
 
@@ -82,6 +90,14 @@ def conn_prob_rule(src, trg, max_dist,pdf_lookup):
             return 1
         else:
             return 0
+
+def gap_rule(source, target):
+    sid = source.node_id                        
+    tid = target.node_id
+    if sid != tid:
+        return 1
+    else:
+        return 0 
 
 # total 400x1000x450
 # Order from top to bottom is SO,SP,SR,SLM total
@@ -160,9 +176,14 @@ def make_lookup(mean,std_dev,pmax,max_distance ):
     pdf_lookup = pd.DataFrame(scaled_pdf_values)
     return pdf_lookup
 
-i2e_lookup = make_lookup(0,96.6,0.15)
-e2i_lookup = make_lookup(0,99.84,0.12)
-i2i_lookup = make_lookup(0,126.77,0.12)
+i2e_lookup = make_lookup(0,96.6,0.15,max_distance)
+e2i_lookup = make_lookup(0,99.84,0.12,max_distance)
+i2i_lookup = make_lookup(0,126.77,0.12,max_distance)
+
+
+
+#net.add_gap_junctions(source={'pop_name': 'PV'}, target={'pop_name': 'PV'}, connection_rule=gap_rule,resistance=1500,target_sections=['apical'])
+
 
 #############        src     dest  conn_rule         pdf_lookup,        maxd             json           dist_range    max_dist     secName secid secloc
 conn1 = setEdges(net,'AAC','Pyr',  conn_prob_rule,   [i2e_lookup,  max_distance],     'CHN2PN.json',      [0,     max_distance], 'axon',     6,    0.5)

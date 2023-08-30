@@ -234,7 +234,7 @@ static void nrn_alloc(Prop* _prop) {
  	Dep = 100;
  	Fac = 10;
  	e_GABAA = -70;
- 	gmax = 0.002;
+ 	gmax = 0.001;
  	u0 = 0;
  	synapseID = 0;
  	verboseLevel = 0;
@@ -286,7 +286,7 @@ extern void _cvode_abstol( Symbol**, double*, int);
  pnt_receive_init[_mechtype] = _net_init;
  pnt_receive_size[_mechtype] = 7;
  	hoc_register_var(hoc_scdoub, hoc_vdoub, hoc_intfunc);
- 	ivoc_help("help ?1 int2pyr /home/dpd4k4/CA1_model/biophys_components/mechanisms/modfiles/int2pyr.mod\n");
+ 	ivoc_help("help ?1 int2pyr /home/dpd4k4/CA1_model_new/biophys_components/mechanisms/modfiles/int2pyr.mod\n");
  hoc_register_limits(_mechtype, _hoc_parm_limits);
  hoc_register_units(_mechtype, _hoc_parm_units);
  }
@@ -590,7 +590,7 @@ _first = 0;
 #endif
 
 #if NMODL_TEXT
-static const char* nmodl_filename = "/home/dpd4k4/CA1_model/biophys_components/mechanisms/modfiles/int2pyr.mod";
+static const char* nmodl_filename = "/home/dpd4k4/CA1_model_new/biophys_components/mechanisms/modfiles/int2pyr.mod";
 static const char* nmodl_file_text = 
   "COMMENT\n"
   "/**\n"
@@ -640,7 +640,7 @@ static const char* nmodl_file_text =
   "    Dep          = 100   (ms) : relaxation time constant from depression\n"
   "    Fac          = 10    (ms) :  relaxation time constant from facilitation\n"
   "    e_GABAA      = -70   (mV) : GABAA reversal potential was -80mv change to -75 never heard of e_gaba not -75 - Greg\n"
-  "    gmax         = .002  (uS) : weight conversion factor (from nS to uS)\n"
+  "    gmax         = .001  (uS) : weight conversion factor (from nS to uS)\n"
   "    u0           = 0          :initial value of u, which is the running value of release probability\n"
   "    synapseID    = 0\n"
   "    verboseLevel = 0\n"

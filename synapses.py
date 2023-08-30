@@ -151,7 +151,14 @@ def Pyr2Chn(syn_params, sec_x, sec_id):
         lsyn.Wmin = float(syn_params['Wmin']) * lsyn.initW # par.x(2) * lsyn.initW
     #delay = float(syn_params['initW']) # par.x(3) + delayDistance
     #lcon = new NetCon(&v(0.5), lsyn, 0, delay, 1)
-
+    if syn_params.get('tau_d_NMDA'):
+        lsyn.tau_d_NMDA = float(syn_params['tau_d_NMDA']) # par.x(10)
+    if syn_params.get('tau_r_NMDA'):
+        lsyn.tau_r_NMDA = float(syn_params['tau_r_NMDA']) # par.x(10)
+    if syn_params.get('tau_d_AMPA'):
+        lsyn.tau_d_AMPA = float(syn_params['tau_d_AMPA']) # par.x(10)
+    if syn_params.get('tau_r_AMPA'):
+        lsyn.tau_r_AMPA = float(syn_params['tau_r_AMPA']) # par.x(10)
     if syn_params.get('lambda1'):
         lsyn.lambda1 = float(syn_params['lambda1']) # par.x(6)
     if syn_params.get('lambda2'):
@@ -217,6 +224,15 @@ def Pyr2Pv(syn_params, sec_x, sec_id):
         lsyn.gbar_ampa = float(syn_params['gbar_ampa'])  # par.x(24)
     if syn_params.get('Erev_ampa'):
         lsyn.Erev_ampa = float(syn_params['Erev_ampa'])  # par.x(16)
+    if syn_params.get('tau_d_NMDA'):
+        lsyn.tau_d_NMDA = float(syn_params['tau_d_NMDA']) # par.x(10)
+    if syn_params.get('tau_r_NMDA'):
+        lsyn.tau_r_NMDA = float(syn_params['tau_r_NMDA']) # par.x(10)
+    if syn_params.get('tau_d_AMPA'):
+        lsyn.tau_d_AMPA = float(syn_params['tau_d_AMPA']) # par.x(10)
+    if syn_params.get('tau_r_AMPA'):
+        lsyn.tau_r_AMPA = float(syn_params['tau_r_AMPA']) # par.x(10)
+
 
     if syn_params.get('AlphaTmax_nmda'):
         lsyn.AlphaTmax_nmda = float(syn_params['AlphaTmax_nmda'])  # par.x(25)
@@ -316,6 +332,12 @@ def PV2CHN(syn_params, sec_x, sec_id):
         lsyn.gbar_gaba = float(syn_params['gbar_gaba']) # par.x(24)
     if syn_params.get('Erev_gaba'):
         lsyn.Erev_gaba = float(syn_params['Erev_gaba']) # par.x(16)
+        
+    if syn_params.get('tau_d_GABAA'):
+        lsyn.tau_d_GABAA = float(syn_params['tau_d_GABAA'])
+        
+    if syn_params.get('tau_r_GABAA'):
+        lsyn.tau_r_GABAA = float(syn_params['tau_r_GABAA'])
         
     if syn_params.get('gmax'):
         lsyn.gmax = float(syn_params['gmax']) # par.x(16)
@@ -473,17 +495,20 @@ def Chn2Pyr(syn_params, sec_x, sec_id):
         #     lsyn.gmax = 0.005
         lsyn.gmax = float(syn_params['gmax'])
         
-
+    if syn_params.get('tau_r_GABAA'):
+        lsyn.tau_r_GABAA = float(syn_params['tau_r_GABAA']) # par.x(21)
+    if syn_params.get('tau_d_GABAA'):
+        lsyn.tau_d_GABAA = float(syn_params['tau_d_GABAA']) # par.x(21)
     
     if syn_params.get('initW'):
         m = syn_params.get('initW_lognormal_mean')
         s = syn_params.get('initW_lognormal_std')
-        mean = m# np.log(m) - 0.5 * np.log((s/m)**2+1)
-        std = s#np.sqrt(np.log((s/m)**2 + 1))
-        log_weight = float(np.random.lognormal(mean,std, 1)*0.001)#was *0.001
-        if log_weight >= float(3*m):
+        mean = float(m)*5# np.log(m) - 0.5 * np.log((s/m)**2+1)
+        std = float(s)#np.sqrt(np.log((s/m)**2 + 1))
+        log_weight = float(np.random.lognormal(mean,std, 1))*0.001#was *0.001
+        if log_weight >= float(3*mean):
             
-            log_weight = float(3*m)
+            log_weight = float(3*mean)
         
             
         lsyn.initW = float(log_weight) # par.x(0) * rC.uniform(0.5,1.0)//rand.normal(0.5,1.5) //`rand.repick()
@@ -504,8 +529,8 @@ def Chn2Pyr(syn_params, sec_x, sec_id):
         lsyn.threshold1 = float(syn_params['threshold1']) # par.x(8)
     if syn_params.get('threshold2'):
         lsyn.threshold2 = float(syn_params['threshold2']) # par.x(9)
-    if syn_params.get('tauD1'):
-        lsyn.tauD1 = float(syn_params['tauD1']) # par.x(10)
+
+        
     if syn_params.get('d1'):
         lsyn.d1 = float(syn_params['d1']) # par.x(11)
     if syn_params.get('tauD2'):
@@ -560,8 +585,8 @@ def PV2Pyr(syn_params, sec_x, sec_id):
         lsyn.tau_d_GABAA = float(syn_params['tau_d_GABAA'])
 
     if syn_params.get('initW'):
-        m = syn_params.get('initW_lognormal_mean')
-        s = syn_params.get('initW_lognormal_std')
+        m = float(syn_params.get('initW_lognormal_mean'))
+        s = float(syn_params.get('initW_lognormal_std'))
         mean = np.log(m) - 0.5 * np.log((s / m) ** 2 + 1)
         std = np.sqrt(np.log((s / m) ** 2 + 1))
         log_weight = float(np.random.lognormal(mean, std, 1))
@@ -1043,8 +1068,10 @@ def Pyr2OLM(syn_params, sec_x, sec_id):
         
 
     if syn_params.get('initW'):
-        m = syn_params.get('initW_lognormal_mean')
-        s = syn_params.get('initW_lognormal_std')
+        m = float(syn_params['initW_lognormal_mean'])# syn_params.get('initW_lognormal_mean')
+        s = float(syn_params['initW_lognormal_std'])#syn_params.get('initW_lognormal_std')#
+
+        
         mean = np.log(m) - 0.5 * np.log((s / m) ** 2 + 1)
         std = np.sqrt(np.log((s / m) ** 2 + 1))
         log_weight = float(np.random.lognormal(mean, std, 1))

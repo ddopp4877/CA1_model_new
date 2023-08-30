@@ -1,9 +1,9 @@
 {
 "level_of_detail": "chn2pyr",
-"gmax": "80",
-"initW": "3",
+"gmax": 0.00007,
+"initW": "1",
 "initW_lognormal_mean": 2,
 "initW_lognormal_std": 0.5,
-"tau_r_GABAA": 80,
-"tau_d_GABAA": 100
+"tau_r_GABAA": 10,
+"tau_d_GABAA": 80
 }

@@ -1,8 +1,10 @@
 {
     "level_of_detail": "pyr2pv",
-    "gmax": "0.01",
+    "gmax": "2",
     "initW": "1",
-    "initW_lognormal_mean": 0.5,
+    "tau_d_NMDA": 20,
+    "tau_r_NMDA": 1.5,
+    "initW_lognormal_mean": 1,
     "initW_lognormal_std": 0.2
 
 }

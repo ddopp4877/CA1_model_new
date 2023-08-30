@@ -31,6 +31,7 @@ extern void _ch_Nav_reg(void);
 extern void _ch_Navngf_reg(void);
 extern void _ch_Navp_reg(void);
 extern void _ExpGABAab_reg(void);
+extern void _gap_reg(void);
 extern void _iconc_Ca_reg(void);
 extern void _int2int_reg(void);
 extern void _int2pyr_reg(void);
@@ -80,6 +81,7 @@ void modl_reg(){
     fprintf(stderr," \"ch_Navngf.mod\"");
     fprintf(stderr," \"ch_Navp.mod\"");
     fprintf(stderr," \"ExpGABAab.mod\"");
+    fprintf(stderr," \"gap.mod\"");
     fprintf(stderr," \"iconc_Ca.mod\"");
     fprintf(stderr," \"int2int.mod\"");
     fprintf(stderr," \"int2pyr.mod\"");
@@ -126,6 +128,7 @@ void modl_reg(){
   _ch_Navngf_reg();
   _ch_Navp_reg();
   _ExpGABAab_reg();
+  _gap_reg();
   _iconc_Ca_reg();
   _int2int_reg();
   _int2pyr_reg();

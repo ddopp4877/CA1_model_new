@@ -1,6 +1,6 @@
 #!bin/bash
 
-source_folder="/home/dpd4k4/CA1_model/"
+source_folder="/home/dpd4k4/CA1_model_new/"
 destination_folder="/home/shared/CA1_model/"
 excluded_folders=("CA1Results","CA1_model_env",".ipynb_checkpoints")
 
